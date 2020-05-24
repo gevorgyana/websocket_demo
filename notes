@@ -19,3 +19,13 @@ formula, and the cliens keeps getting the coordinates
 from the server and getting them plotted (first do not
 use any graphics library, then use it). no idea yet what
 the graphics library should look like.
+
+the funny thing is that Tomcat is
+not even necessary here. WebSockets
+can use used with Spring. They can
+also be used with bare java
+exetensions. I am now trying to
+simply inlcude the java extensions
+and see how gradle resolves them.
+Here is the link to the guide that
+does it the same way. https://www.nexmo.com/blog/2018/10/22/create-websocket-server-java-api-dr
