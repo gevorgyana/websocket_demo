@@ -2,3 +2,20 @@ use this page to get guides on how to
 write the client app; the java websocket api
 is very simple and uses annotated method;
 therefore, simply need to follow the guides.
+
+first step is porting to gradle the project
+taht Gleb has. (only the server part)
+
+second step is implementing simple (maybe even use
+a library of some kind) collision on two objects;
+
+0) handshakes
+1) server is listening to client
+2) client sends data (the coords and masses, and
+acceleration)
+3) from now on: the server keeps calculating the
+positions of the balls with the help of some
+formula, and the cliens keeps getting the coordinates
+from the server and getting them plotted (first do not
+use any graphics library, then use it). no idea yet what
+the graphics library should look like.
