@@ -1,0 +1,14 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    implementation 'javax.websocket:javax.websocket-api:1.1'
+}
+
+mainClassName = 'App'
