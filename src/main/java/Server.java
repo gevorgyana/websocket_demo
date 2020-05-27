@@ -4,10 +4,12 @@ import javax.websocket.server.*;
 import javax.websocket.*;
 import java.io.*;
 
-@ServerEndpoint(value="/endpoint")
+// no trailing slash!
+@ServerEndpoint(value="/entry")
 public class Server {
+
   @OnOpen
   public void onOpen() throws IOException {
-    System.out.println("The test did pass!");
+    System.out.println("The client has connected!");
   }
 }
