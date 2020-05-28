@@ -28,16 +28,16 @@ public final class Floor {
     FLOOR.scaleTextureCoordinates(new Vector2f(3, 6));
   }
 
-  Floor(AssetManager assetManager, Node rootNode, BulletAppState bulletAppState) {
+  Floor(AssetManager assetManager, Node rootNode,
+        BulletAppState bulletAppState) {
     initMaterials(assetManager);
     initPhysics(rootNode, bulletAppState);
   }
 
   private void initMaterials(AssetManager assetManager) {
-
     assetManager.registerLocator("assets", FileLocator.class);
-
-    material = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+    material = new Material(assetManager,
+                            "Common/MatDefs/Misc/Unshaded.j3md");
     TextureKey key3 = new TextureKey("Textures/material.png");
     key3.setGenerateMips(true);
     Texture tex3 = assetManager.loadTexture(key3);
@@ -45,12 +45,12 @@ public final class Floor {
     material.setTexture("ColorMap", tex3);
   }
 
-  private void initPhysics(Node rootNode, BulletAppState bulletAppState){
+  private void initPhysics(Node rootNode,
+                           BulletAppState bulletAppState) {
     Geometry floor_geo = new Geometry("Floor", FLOOR);
     floor_geo.setMaterial(material);
     floor_geo.setLocalTranslation(0, -0.1f, 0);
     rootNode.attachChild(floor_geo);
-
     floor_phy = new RigidBodyControl(0.0f);
     floor_geo.addControl(floor_phy);
     bulletAppState.getPhysicsSpace().add(floor_phy);

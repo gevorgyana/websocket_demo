@@ -21,11 +21,6 @@ import java.util.Random;
 
 import com.jme3.asset.plugins.FileLocator;
 
-/**
- * Originally written by
- * @author Alexandra
- */
-
 public class Ball {
 
   private Node rootNode;
@@ -41,19 +36,19 @@ public class Ball {
 
   Ball() {}
 
-  Ball(AssetManager assetManager, Node rootNode, BulletAppState bulletAppState) {
+  Ball(AssetManager assetManager, Node rootNode,
+       BulletAppState bulletAppState) {
     this.rootNode = rootNode;
     this.bulletAppState = bulletAppState;
     initMaterials(assetManager);
-
-    // todo position them properly
     initBalls(new Vector3f(-10, 0.4f, 1));
     initBalls(new Vector3f(10, 0.4f, 1));
   }
 
   private void initMaterials(AssetManager assetManager) {
     assetManager.registerLocator("assets", FileLocator.class);
-    material = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+    material = new Material(assetManager,
+                            "Common/MatDefs/Misc/Unshaded.j3md");
     TextureKey key2 = new TextureKey("Textures/material.png");
     key2.setGenerateMips(true);
     Texture tex2 = assetManager.loadTexture(key2);
@@ -72,14 +67,14 @@ public class Ball {
     ball_phys.add(ball_phy);
   }
 
-  protected void createBall(Camera cam) {
-    initBalls(Computations.calcPosition(cam));
-  }
-
   protected void move(Camera cam) {
     Random rand = new Random();
     for (RigidBodyControl ball_phy : ball_phys) {
-      ball_phy.setLinearVelocity(Computations.calcDirection(cam, ball_phy).mult(2 + rand.nextInt(1)));
+      ball_phy
+          .setLinearVelocity(
+              Computations
+              .calcDirection(cam, ball_phy)
+              .mult(2 + rand.nextInt(1)));
     }
   }
 }
