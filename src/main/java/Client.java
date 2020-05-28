@@ -26,15 +26,6 @@ import org.apache.tomcat.websocket.*;
  * For this to work, the server-side *.war must be
  * placed under $CATALINA_HOME/webapps/websocket. This demo
  * uses Tomcat.
- *
- * For reference, see https://www.developer.com/java/ent/developing-websocket-clientserver-endpoints.html,
- * this guide uses the javax.websocket pure implementation and uses
- * ServiceLoader to load the implementaiton of the specification at
- * runtime,
- *
- * and this https://www.openshift.com/blog/how-to-build-java-websocket-applications-using-the-jsr-356-api
- * guide uses the implementation of the Tyrus project, bypassing the
- * interface of javax and therefore making the code platform-dependant.
  */
 
 @ClientEndpoint
@@ -51,8 +42,7 @@ public class Client {
           new URI("ws://localhost:8080/websocketDemo/entry")
       );
       System.out.println("Connected!");
-    } catch(/*URISyntaxException | DeploymentException | IOException*/
-    Exception e) {
+    } catch(URISyntaxException | DeploymentException | IOException e) {
       e.printStackTrace();
       System.out.println("Failed!");
     }

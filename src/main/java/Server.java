@@ -4,7 +4,6 @@ import javax.websocket.server.*;
 import javax.websocket.*;
 import java.io.*;
 
-// no trailing slash!
 @ServerEndpoint(value="/entry")
 public class Server {
 
