@@ -11,3 +11,9 @@ Client
 - Use them as a regular java application. For example, run the Client
 with ```java Client```.
 - Server must be launched before the client for Client to work.
+
+Regarding the JMonkey backend:
+- it uses single thread to operate (check the log outputs of current
+thread id's from the Client.java and Controller.java). So it makes things
+easier, the internal callback will now ask for information from the
+server.

@@ -23,17 +23,17 @@ public final class Floor {
   private RigidBodyControl floor_phy;
   private static final Box FLOOR;
 
-  static{
+  static {
     FLOOR = new Box(15f, 0.1f, 10f);
     FLOOR.scaleTextureCoordinates(new Vector2f(3, 6));
   }
 
-  Floor(AssetManager assetManager, Node rootNode, BulletAppState bulletAppState){
+  Floor(AssetManager assetManager, Node rootNode, BulletAppState bulletAppState) {
     initMaterials(assetManager);
     initPhysics(rootNode, bulletAppState);
   }
 
-  private void initMaterials(AssetManager assetManager){
+  private void initMaterials(AssetManager assetManager) {
 
     assetManager.registerLocator("assets", FileLocator.class);
 

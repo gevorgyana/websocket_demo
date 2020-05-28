@@ -22,9 +22,10 @@ import java.util.Random;
 import com.jme3.asset.plugins.FileLocator;
 
 /**
- *
+ * Originally written by
  * @author Alexandra
  */
+
 public class Ball {
 
   private Node rootNode;
@@ -38,26 +39,20 @@ public class Ball {
     SPHERE.setTextureMode(Sphere.TextureMode.Projected);
   }
 
-  Ball() {
-
-  }
+  Ball() {}
 
   Ball(AssetManager assetManager, Node rootNode, BulletAppState bulletAppState) {
     this.rootNode = rootNode;
     this.bulletAppState = bulletAppState;
-
-
     initMaterials(assetManager);
-    initBalls(new Vector3f(-6, 0.4f, 1));
-    initBalls(new Vector3f(-7, 0.4f, 2));
-    initBalls(new Vector3f(-7, 0.4f, 0));
+
+    // todo position them properly
+    initBalls(new Vector3f(-10, 0.4f, 1));
+    initBalls(new Vector3f(10, 0.4f, 1));
   }
 
-
   private void initMaterials(AssetManager assetManager) {
-
     assetManager.registerLocator("assets", FileLocator.class);
-
     material = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
     TextureKey key2 = new TextureKey("Textures/material.png");
     key2.setGenerateMips(true);
@@ -70,27 +65,15 @@ public class Ball {
     Geometry ball_geo = new Geometry("cannon ball", SPHERE);
     ball_geo.setMaterial(material);
     rootNode.attachChild(ball_geo);
-
     ball_phy = new RigidBodyControl(2);
     ball_geo.addControl(ball_phy);
-
     bulletAppState.getPhysicsSpace().add(ball_phy);
     ball_phy.setPhysicsLocation(position);
+    ball_phys.add(ball_phy);
   }
 
   protected void createBall(Camera cam) {
-    RigidBodyControl ball_phy;
-    Geometry ball_geo = new Geometry("cannon ball", SPHERE);
-    ball_geo.setMaterial(material);
-    rootNode.attachChild(ball_geo);
-
-    ball_phy = new RigidBodyControl(2);
-    ball_geo.addControl(ball_phy);
-
-    bulletAppState.getPhysicsSpace().add(ball_phy);
-    ball_phy.setPhysicsLocation(Computations.calcPosition(cam));
-
-    ball_phys.add(ball_phy);
+    initBalls(Computations.calcPosition(cam));
   }
 
   protected void move(Camera cam) {

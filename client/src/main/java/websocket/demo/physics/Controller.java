@@ -5,6 +5,7 @@ import com.jme3.bullet.BulletAppState;
 import com.jme3.font.BitmapText;
 import com.jme3.input.MouseInput;
 import com.jme3.input.controls.ActionListener;
+
 /**
  * Originally written by
  * @author Alexandra
@@ -17,7 +18,6 @@ public class Controller extends SimpleApplication {
   private BulletAppState bulletAppState;
   private Ball balls;
   private final static String FONT = "Interface/Fonts/Default.fnt";
-
 
   @Override
   public void simpleInitApp() {
@@ -37,14 +37,16 @@ public class Controller extends SimpleApplication {
     inputManager.addMapping("move",
                             new MouseButtonTrigger(MouseInput.BUTTON_RIGHT));
     inputManager.addListener(actionListener, "move");
-
     initCrossHairs();
   }
-
 
   private final ActionListener actionListener = new ActionListener() {
       @Override
       public void onAction(String name, boolean keyPressed, float tpf) {
+
+        System.out.println("Callback's id");
+        System.out.println(Thread.currentThread().getId());
+
         if (name.equals("create") && !keyPressed) {
           balls.createBall(cam);
         }
