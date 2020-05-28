@@ -12,7 +12,11 @@ import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
 import java.lang.InterruptedException;
 import java.lang.*;
-import java.io.*;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import com.jme3.math.Vector3f;
 
 /**
  * This example uses the Java Websocket API described here, see
@@ -38,37 +42,93 @@ import java.io.*;
  * Part of the code has to be static in order to share
  * between multiple endpoints, but there are
  * more appropriate workarounds such as retrieving information
- * from the Sessions that come into the endpoint
+ * from the Sessions that come into the endpoint. If there is not
+ * need to share data/state between client endpoints, there is no
+ * need to allow static members.
  */
 
 @ClientEndpoint
-
 public class Client {
+
+  // we remember the session as we will need to send messages to
+  // the server through it, we only store the single session per
+  // each instance of Client. As there is only going to be one
+  // client, there is no need to have static references to the
+  // endpoints (we do not communicate between clients, it is a
+  // server - client 1:1 relatinoship)
+  private Session session;
 
   // a handle used to control the game engine; makes sense to
   // have one controller per session, as a single endpoint class
   // is created for single connection, this is what we want
-  public Controller controller;
+  private Controller controller;
+
+  // to handle remote execution results
+  private boolean computationIsReady;
+  private Vector3f computationResult;
 
   public void setController(Controller controller) {
     this.controller = controller;
   }
 
-  /*
-  @OnMessage
-  public void onMessage() {
+  public void requestComputation(ArrayList<String> data) {
+    computationIsReady = false;
 
+    System.out.println("Forwarding (2/2) from thread: " + Thread.currentThread().getId() +
+                       "; Data: " + data);
+
+    try {
+      session.getBasicRemote()
+          .sendText (
+              data.get(0) + "|" + data.get(1) + "|" +
+              data.get(2) + "|" + data.get(3) + "|" +
+              data.get(4) + "|" + data.get(5) + "|" +
+              data.get(6) + "|" + data.get(7)
+          );
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
+    System.out.println("Forwarding completed");
   }
-  */
+
+  public Vector3f getComputationResult() {
+
+    System.out.println("Thread: " + Thread.currentThread().getId() +
+                       " asked for computationResult");
+
+    if (computationIsReady) {
+      System.out.println("And it is ready...");
+      return computationResult;
+    }
+    System.out.println("But it is not ready...");
+    return null;
+  }
+
+  @OnMessage
+  public void messageHandler(String data)
+  {
+    System.out.println("Thread: " + Thread.currentThread().getId() +
+                       "Accepted : " + data);
+
+    // no error handling now
+    // String[] dataSplit = data.split("|");
+    computationIsReady = true;
+    computationResult = new Vector3f(1, 2, 3);
+    /*
+      this.computationResult = new Vector3f(
+        Float.parseFloat(dataSplit[0]),
+        Float.parseFloat(dataSplit[1]),
+        Float.parseFloat(dataSplit[2]));
+    */
+  }
 
   @OnOpen
   public void onOpen(Session session) {
-
-    // initialize the drawing engine
+    this.session = session;
     controller = new Controller(this);
     setController(controller);
-
-    // ask for data
+    System.out.println("Connected!");
 
     // and we are live!
     controller.start();
@@ -77,6 +137,7 @@ public class Client {
   // Launches the Client entry and then everything
   // happens inside the annotated methods, this is simiply to
   // boot the Client
+
   public static void main(String[] args) {
     WebSocketContainer container = WsContainerProvider
         .getWebSocketContainer();
@@ -86,7 +147,6 @@ public class Client {
           Client.class,
           new URI("ws://localhost:8080/websocketDemo/entry")
       );
-      System.out.println("Connected!");
     } catch(URISyntaxException | DeploymentException | IOException e) {
       e.printStackTrace();
       System.out.println("Failed!");

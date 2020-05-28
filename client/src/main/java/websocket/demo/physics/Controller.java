@@ -1,20 +1,24 @@
 package websocket.demo.physics;
 
-import com.jme3.app.SimpleApplication;
-import com.jme3.bullet.BulletAppState;
-import com.jme3.font.BitmapText;
-import com.jme3.input.MouseInput;
-import com.jme3.input.controls.ActionListener;
-
 /**
  * Originally written by
  * @author Alexandra
  */
 
+import websocket.demo.Client;
+
+import com.jme3.app.SimpleApplication;
+import com.jme3.bullet.BulletAppState;
+import com.jme3.bullet.control.RigidBodyControl;
+import com.jme3.font.BitmapText;
+import com.jme3.input.MouseInput;
 import com.jme3.input.controls.MouseButtonTrigger;
+import com.jme3.input.controls.ActionListener;
+import com.jme3.renderer.Camera;
 import com.jme3.math.Vector3f;
 
-import websocket.demo.Client;
+import java.util.Arrays;
+import java.util.ArrayList;
 
 public class Controller extends SimpleApplication {
 
@@ -41,39 +45,66 @@ public class Controller extends SimpleApplication {
                                 MouseInput.BUTTON_RIGHT));
     inputManager.addListener(actionListener, "move");
     initCrossHairs();
+  }
 
-    // initialize the connection
-    // websocket http handshake happens here
+  // This is asking the client endpoint to do something
+  // The client is then responsible to notify us when he finishes
+  private void forwardComputation(Camera cam,
+                                  RigidBodyControl ball_phy) {
+
+    Vector3f v = cam.getDirection();
+    Vector3f p = cam.getLocation();
+    float ball_phy_x = ball_phy.getPhysicsLocation().x;
+    float ball_phy_z = ball_phy.getPhysicsLocation().z;
+
+    ArrayList<String> data = new ArrayList<> (
+        Arrays.asList (
+            String.valueOf(v.x), String.valueOf(v.y),
+            String.valueOf(v.z), String.valueOf(p.x),
+            String.valueOf(p.y), String.valueOf(p.z),
+            String.valueOf(ball_phy_x), String.valueOf(ball_phy_z)
+        )
+    );
+
+    System.out.println("Forwarding (1/2) from thread: "+
+                       Thread.currentThread().getId());
+
+    client.requestComputation(data);
   }
 
   private final ActionListener actionListener = new ActionListener() {
 
       // this is the main entry point for controlling the logic of
       // the application; it currently is called whenever a user
-      // presses left or rigth mouse button
+      // presses rigth mouse button
 
       @Override
-      public void onAction(String name, boolean keyPressed, float tpf) {
-        // talk to the server via the client singleton
+      public void onAction(String name, boolean keyPressed,
+                           float tpf) {
 
-        // wait for response
-        try {
-          Thread.sleep(2000);
-        } catch (InterruptedException e) {
-          // we are the single thread, we cannot get interrupted
+        if (!name.equals("move") || keyPressed) {
+          return;
         }
 
-        // ask the client, if he is ready; if not, then log that
-        // connection is lost
+        for (RigidBodyControl ball_phy : balls.ball_phys) {
 
-        // if yes, take the data from the singleton and pass it
-        // to the move method
+          // getComputationresult is called from 1 to 3 times
+          // depending on the status of the communication
+          forwardComputation(cam, ball_phy);
+          if (client.getComputationResult() == null) {
+            // wait for some time
+            try {
+              Thread.sleep(5000);
+            } catch(InterruptedException e) {
 
-        // todo later use move in a smart way, for now
-        // simply call it.
-
-        if (name.equals("move") && !keyPressed) {
-          balls.move(cam);
+            }
+          }
+          if (client.getComputationResult() != null) {
+            System.out.println("There is response");
+            ball_phy.setLinearVelocity(client.getComputationResult());
+          } else {
+            System.out.println("No response");
+          }
         }
       }
     };

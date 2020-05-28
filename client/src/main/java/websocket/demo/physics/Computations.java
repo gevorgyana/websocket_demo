@@ -25,13 +25,13 @@ public class Computations {
                                           RigidBodyControl ball_phy) {
     Vector3f v = cam.getDirection();
     Vector3f p = cam.getLocation();
+    float ball_phy_x = ball_phy.getPhysicsLocation().x;
+    float ball_phy_z = ball_phy.getPhysicsLocation().z;
     Random rand = new Random();
 
-    return new Vector3f((v.x * (0.4f - p.y) / v.y) +
-                        p.x - ball_phy.getPhysicsLocation().x,
+    return new Vector3f((v.x * (0.4f - p.y) / v.y) + p.x - ball_phy_x,
                         0.4f,
-                        (v.z * (0.4f - p.y) / v.y) + p.z -
-                        ball_phy.getPhysicsLocation().z +
+                        (v.z * (0.4f - p.y) / v.y) + p.z - ball_phy_z +
                         rand.nextFloat() % 3f);
   }
 }

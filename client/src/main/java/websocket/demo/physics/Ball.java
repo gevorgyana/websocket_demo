@@ -26,7 +26,7 @@ public class Ball {
   private Node rootNode;
   private BulletAppState bulletAppState;
   private Material material;
-  private ArrayList<RigidBodyControl> ball_phys = new ArrayList<>();
+  public ArrayList<RigidBodyControl> ball_phys = new ArrayList<>();
   private static final Sphere SPHERE;
 
   static {
