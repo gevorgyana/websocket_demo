@@ -1,6 +1,3 @@
-TODO: client must be in a different project, it is very stupid
-that the war will package the client into the archieve.
-
 For reference, see
 
 [this](https://www.developer.com/java/ent/developing-websocket-clientserver-endpoints.html), guide uses the javax.websocket pure
@@ -14,17 +11,3 @@ Client
 - Use them as a regular java application. For example, run the Client
 with ```java Client```.
 - Server must be launched before the client for Client to work.
-
-Server
-- Run ./gradlew war to prepare the packaged for Tomcat.
-- Then grab the WAR from build/libs and move it to
-```$CATALINA_HOME/webapps/```
-- Launch the Tomcat by running ./startup.sh in the directory where it
-is installed
-- To test if the deployed WAR works, go to localhost:8080/websocketDemo
-- If Tomcat is not installed, download it from the official website
-and unpack somewhere.
-
-To troubleshoot the server, see the logs
-in the $CATALINA_HOME/logs. Use grep to
-search.

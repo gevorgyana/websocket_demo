@@ -8,6 +8,8 @@ import java.util.concurrent.CountDownLatch;
 import jakarta.websocket.*;
 import org.apache.tomcat.websocket.*;
 
+import websocket.demo.physics.Controller;
+
 /**
  * This example uses the Java Websocket API described here, see
  * client deployment (section 6.1). However, the API only describes the
@@ -28,10 +30,17 @@ import org.apache.tomcat.websocket.*;
  * uses Tomcat.
  */
 
+import java.io.*;
+
 @ClientEndpoint
 
 public class Client {
+
   public static void main(String[] args) {
+
+    Controller controller = new Controller();
+    controller.start();
+
     WebSocketContainer container = WsContainerProvider.getWebSocketContainer();
     assert(container != null);
 

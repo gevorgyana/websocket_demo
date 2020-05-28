@@ -1,0 +1,12 @@
+plugins {
+    id 'java'
+    id 'war'
+}
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    implementation 'javax.websocket:javax.websocket-api:1.1'
+}
