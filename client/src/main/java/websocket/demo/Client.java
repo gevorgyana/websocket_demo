@@ -15,6 +15,7 @@ import java.lang.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.logging.*;
 
 import com.jme3.math.Vector3f;
 
@@ -84,12 +85,13 @@ public class Client {
               data.get(2) + "|" + data.get(3) + "|" +
               data.get(4) + "|" + data.get(5) + "|" +
               data.get(6) + "|" + data.get(7)
-          );
-    } catch (IOException e) {
+                     );
+    } catch (Exception e) {
       e.printStackTrace();
     }
 
-    System.out.println("Forwarding completed");
+    Logger logger = Logger.getAnonymousLogger();
+    logger.info("Forwarding completed");
   }
 
   public Vector3f getComputationResult() {
@@ -132,6 +134,14 @@ public class Client {
 
     // and we are live!
     controller.start();
+    /*
+    Runnable gameLoop = () -> {
+      controller.start();
+    };
+
+    Thread gameThread = new Thread(gameLoop);
+    gameThread.start();
+    */
   }
 
   // Launches the Client entry and then everything

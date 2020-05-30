@@ -4,6 +4,7 @@ import javax.websocket.server.*;
 import javax.websocket.*;
 import java.io.*;
 import java.lang.*;
+import java.util.logging.*;
 
 @ServerEndpoint(value="/entry")
 public class Server {
@@ -11,9 +12,10 @@ public class Server {
   @OnMessage
   public void onMessage(String data, Session session) {
     try {
+      Logger.getAnonymousLogger().info("Received " + data);
       session.getBasicRemote().sendText("1|2|3");
       System.out.println("Sent the message");
-    } catch (IOException e) {
+    } catch (Exception e) {
       System.out.println("Unable to send message...");
     }
   }
