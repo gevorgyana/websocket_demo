@@ -112,17 +112,8 @@ public class Client {
   {
     System.out.println("Thread: " + Thread.currentThread().getId() +
                        "Accepted : " + data);
-
-    // no error handling now
-    // String[] dataSplit = data.split("|");
     computationIsReady = true;
     computationResult = new Vector3f(1, 2, 3);
-    /*
-      this.computationResult = new Vector3f(
-        Float.parseFloat(dataSplit[0]),
-        Float.parseFloat(dataSplit[1]),
-        Float.parseFloat(dataSplit[2]));
-    */
   }
 
   @OnOpen
@@ -133,15 +124,16 @@ public class Client {
     System.out.println("Connected!");
 
     // and we are live!
-    controller.start();
-    /*
+    // controller.start();
+
     Runnable gameLoop = () -> {
       controller.start();
     };
 
     Thread gameThread = new Thread(gameLoop);
     gameThread.start();
-    */
+
+    System.out.println("Out of @OnOpen!");
   }
 
   // Launches the Client entry and then everything
