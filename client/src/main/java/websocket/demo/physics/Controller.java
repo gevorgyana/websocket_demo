@@ -91,20 +91,12 @@ public class Controller extends SimpleApplication {
           // getComputationresult is called from 1 to 3 times
           // depending on the status of the communication
           forwardComputation(cam, ball_phy);
-          if (client.getComputationResult() == null) {
-            // wait for some time
-            try {
-              Thread.sleep(5000);
-            } catch(InterruptedException e) {
 
-            }
+          while (client.getComputationResult() == null) {
+            System.out.println("There is response yet");
           }
-          if (client.getComputationResult() != null) {
-            System.out.println("There is response");
-            ball_phy.setLinearVelocity(client.getComputationResult());
-          } else {
-            System.out.println("No response");
-          }
+
+          ball_phy.setLinearVelocity(client.getComputationResult());
         }
       }
     };

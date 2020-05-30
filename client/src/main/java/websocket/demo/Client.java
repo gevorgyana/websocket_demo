@@ -74,10 +74,9 @@ public class Client {
 
   public void requestComputation(ArrayList<String> data) {
     computationIsReady = false;
-
-    System.out.println("Forwarding (2/2) from thread: " + Thread.currentThread().getId() +
+    System.out.println("Forwarding (2/2) from thread: " +
+                       Thread.currentThread().getId() +
                        "; Data: " + data);
-
     try {
       session.getBasicRemote()
           .sendText (
@@ -85,7 +84,7 @@ public class Client {
               data.get(2) + "|" + data.get(3) + "|" +
               data.get(4) + "|" + data.get(5) + "|" +
               data.get(6) + "|" + data.get(7)
-                     );
+          );
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -98,7 +97,6 @@ public class Client {
 
     System.out.println("Thread: " + Thread.currentThread().getId() +
                        " asked for computationResult");
-
     if (computationIsReady) {
       System.out.println("And it is ready...");
       return computationResult;
@@ -113,7 +111,12 @@ public class Client {
     System.out.println("Thread: " + Thread.currentThread().getId() +
                        "Accepted : " + data);
     computationIsReady = true;
-    computationResult = new Vector3f(1, 2, 3);
+    String[] componentsString = data.split("|");
+    // veeeery dirty
+    float x = Float.parseFloat(componentsString[0]);
+    float y = Float.parseFloat(componentsString[2]);
+    float z = Float.parseFloat(componentsString[4]);
+    computationResult = new Vector3f(x, y, z);
   }
 
   @OnOpen
@@ -123,13 +126,9 @@ public class Client {
     setController(controller);
     System.out.println("Connected!");
 
-    // and we are live!
-    // controller.start();
-
     Runnable gameLoop = () -> {
       controller.start();
     };
-
     Thread gameThread = new Thread(gameLoop);
     gameThread.start();
 
@@ -149,7 +148,7 @@ public class Client {
           Client.class,
           new URI("ws://localhost:8080/websocketDemo/entry")
       );
-    } catch(URISyntaxException | DeploymentException | IOException e) {
+    } catch (URISyntaxException | DeploymentException | IOException e) {
       e.printStackTrace();
       System.out.println("Failed!");
     }
