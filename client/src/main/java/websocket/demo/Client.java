@@ -111,11 +111,14 @@ public class Client {
     System.out.println("Thread: " + Thread.currentThread().getId() +
                        "Accepted : " + data);
     computationIsReady = true;
-    String[] componentsString = data.split("|");
+    String[] componentsString = data.split("\\|"); // pipe (bar) is regex special symbol
     // veeeery dirty
+    System.out.println(componentsString[2]);
+
     float x = Float.parseFloat(componentsString[0]);
-    float y = Float.parseFloat(componentsString[2]);
-    float z = Float.parseFloat(componentsString[4]);
+    float y = Float.parseFloat(componentsString[1]);
+    float z = Float.parseFloat(componentsString[2]);
+    System.out.println(z);
     computationResult = new Vector3f(x, y, z);
   }
 
@@ -133,6 +136,11 @@ public class Client {
     gameThread.start();
 
     System.out.println("Out of @OnOpen!");
+  }
+
+  @OnError
+  public void onError(Throwable err) {
+    err.printStackTrace();
   }
 
   // Launches the Client entry and then everything

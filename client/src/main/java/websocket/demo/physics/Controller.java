@@ -86,6 +86,8 @@ public class Controller extends SimpleApplication {
           return;
         }
 
+        int step = 0;
+
         for (RigidBodyControl ball_phy : balls.ball_phys) {
 
           // getComputationresult is called from 1 to 3 times
@@ -96,7 +98,15 @@ public class Controller extends SimpleApplication {
             System.out.println("There is response yet");
           }
 
-          ball_phy.setLinearVelocity(client.getComputationResult());
+          if (step == 0) {
+            ball_phy.setLinearVelocity(client.getComputationResult());
+          } else {
+            Vector3f reverse = client.getComputationResult();
+            reverse.x *=-1;
+            reverse.y *=-1;
+            reverse.z *=-1;
+            ball_phy.setLinearVelocity(reverse);
+          }
         }
       }
     };
